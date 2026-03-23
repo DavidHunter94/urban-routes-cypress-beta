@@ -1,126 +1,120 @@
-# Urban Routes – Cypress Automation (Beta)
+# Urban Routes – Automatización QA con Cypress (Beta)
 
-Este repositorio contiene una prueba automática end-to-end para la aplicación web **Urban Routes**,
-desarrollada como parte del Sprint 8 del Bootcamp de QA de TripleTen.
+Proyecto de automatización de pruebas E2E para la aplicación web **Urban Routes**, desarrollado como parte del Sprint 9 del Bootcamp de QA de TripleTen.
 
-El objetivo es demostrar que, en un único flujo, un usuario puede:
-- seleccionar una ruta
-- elegir una tarifa
-- ingresar su número de teléfono
-- recibir y validar el código SMS dinámico
+Esta versión en **Cypress + JavaScript** forma parte de una comparativa multi-framework junto a las implementaciones en [Selenium](https://github.com/DavidHunter94/qa-project-Urban-Routes-es) y [Playwright](https://github.com/DavidHunter94/qa-automation-playwright).
 
-Esta versión en Cypress corresponde a una **fase beta**, enfocada en estabilizar
-la verificación telefónica antes de completar el flujo total.
+---
 
-## 🧪 Pruebas implementadas
+## 🧪 Cobertura de pruebas
 
-- Selección de origen y destino  
-- Validación de direcciones ingresadas  
-- Selección de tarifa **Comfort**  
-- Ingreso del número de teléfono  
-- Obtención dinámica del código SMS desde la UI  
-- Ingreso y validación del código SMS  
-- Manejo de modales  
+### Implementado
+- Selección de origen y destino
+- Validación de direcciones ingresadas
+- Selección de tarifa Comfort
+- Ingreso del número de teléfono
+- Obtención dinámica del código SMS desde el DOM
+- Ingreso y validación del código SMS
+- Manejo de modales
 - Manejo de errores JavaScript del frontend
 
-## ⚠️ Limitaciones conocidas
+### Pendiente (limitaciones conocidas)
+- Registro de tarjeta de crédito
+- Solicitud de extras (manta, pañuelos y helados)
+- Confirmación final del pedido
 
-Las siguientes funcionalidades no están automatizadas en esta versión de Cypress debido a defectos críticos en la interfaz del frontend:
+> Las funcionalidades pendientes presentan defectos críticos en el frontend que impiden su automatización estable en esta versión:
+> - Labels flotantes que bloquean campos de entrada
+> - Modales inestables en el flujo de pago
+> - Excepción JavaScript recurrente: `"o is not a function"`
+> - Comportamiento inconsistente del DOM durante carga dinámica
+>
+> El flujo completo fue exitosamente automatizado en Selenium y Playwright.
 
-- Registro de tarjeta de crédito  
-- Solicitud de extras (manta, pañuelos y helados)  
-- Confirmación final del pedido  
+---
 
-### Motivos técnicos
+## ⚙️ Tecnologías utilizadas
 
-- Labels flotantes que bloquean campos de entrada  
-- Modales inestables en el flujo de pago  
-- Excepción JavaScript recurrente:  
-  **"o is not a function"**  
-- Comportamiento inconsistente del DOM durante la carga dinámica  
+- **Lenguaje:** JavaScript
+- **Framework:** Cypress 13.x
+- **Runtime:** Node.js 18.x+
+- **Plugin:** cypress-xpath (selectores XPath)
+- **Patrón de diseño:** Page Object Model (POM)
 
-> Nota: El flujo completo (incluyendo pago y extras)  
-> fue exitosamente automatizado en Selenium como parte del mismo proyecto.
+---
 
-## 🛠️ Tecnologías utilizadas
+## 🏗️ Estructura del proyecto
 
-- **Node.js** 18.x o superior  
-- **Cypress** 13.x  
-- **cypress-xpath** – Soporte para selectores XPath  
-- JavaScript  
-- Page Object Model (POM)  
+```
+project/
+│
+├── cypress/
+│   ├── e2e/
+│   │   └── urban_routes_e2e.cy.js   ← Caso de prueba principal
+│   ├── pages/
+│   │   └── UrbanRoutesPage.js       ← Page Object Model
+│   ├── fixtures/
+│   │   └── data.json                ← Datos fijos de la prueba
+│   └── support/
+│       ├── commands.js              ← Comandos personalizados
+│       └── e2e.js                   ← Configuración global
+│
+├── cypress.config.js
+├── package.json
+└── README.md
+```
 
-## 📦 Instalación y ejecución
+---
 
-### 1️⃣ Clonar el repositorio
-git clone https://github.com/TU_USUARIO/urban-routes-cypress-beta.git
+## ▶️ Instalación y ejecución
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/DavidHunter94/urban-routes-cypress-beta.git
 cd urban-routes-cypress-beta
-2️⃣ Instalar dependencias
+
+# 2. Instalar dependencias
 npm install
-3️⃣ Ejecutar la prueba
+
+# 3. Abrir Cypress
 npx cypress open
-Luego, en la interfaz de Cypress:
+```
 
-Selecciona E2E Testing
+En la interfaz de Cypress:
+1. Selecciona **E2E Testing**
+2. Abre **Chrome** o **Electron**
+3. Ejecuta `urban_routes_e2e.cy.js`
 
-Abre el navegador Chrome o Electron
+> ⚠️ Los tests requieren que el servidor de Urban Routes esté activo.
+> Esta URL es temporal del entorno de TripleTen y puede estar inactiva
+> una vez finalizado el sprint.
 
-Ejecuta el archivo:
+---
 
-urban_routes_e2e.cy.js
-📁 Estructura del proyecto
-cypress/
- ├── e2e/
- │   └── urban_routes_e2e.cy.js      # Caso de prueba principal
- ├── pages/
- │   └── UrbanRoutesPage.js          # Page Object Model
- ├── fixtures/
- │   └── data.json                   # Datos fijos de la prueba
- ├── support/
- │   ├── commands.js                 # Comandos personalizados
- │   └── e2e.js                      # Configuración global
-cypress.config.js                    # Configuración de Cypress
-package.json                         # Dependencias del proyecto
-package-lock.json                    # Lockfile
-.gitignore                           # Archivos ignorados por Git
-README.md                            # Este documento
-🧠 Notas técnicas
-La verificación del código SMS se realiza extrayendo dinámicamente
-el valor desde el contenido del DOM.
+## 🔍 Detalles de implementación
 
-Se aplican workarounds para eliminar labels flotantes que bloquean inputs.
+- Verificación del código SMS extrayendo dinámicamente el valor desde el DOM
+- Workarounds para eliminar labels flotantes que bloquean inputs
+- Excepciones JavaScript del frontend ignoradas para evitar falsos negativos
+- Page Object Model para separar lógica de prueba de lógica de UI
 
-Se ignoran excepciones JavaScript del frontend para evitar falsos negativos.
+---
 
-Se utiliza Page Object Model para separar la lógica de prueba de la lógica de UI.
+## 🔀 Comparativa de frameworks
 
-📌 Estado del proyecto
-Versión: Beta
+Este mismo flujo fue implementado en tres frameworks distintos:
 
-Cobertura actual:
+| | Selenium | Playwright | Cypress |
+|---|---|---|---|
+| Lenguaje | Python | Python | JavaScript |
+| Esperas | Manuales | Automáticas | Automáticas |
+| Cobertura del flujo | Completa ✅ | Completa ✅ | Parcial (beta) ⚠️ |
+| CI/CD | — | GitHub Actions ✅ | — |
 
-Ruta
+---
 
-Tarifa
+## 🚀 Autor
 
-Verificación telefónica
-
-Pendiente:
-
-Pago
-
-Extras
-
-Confirmación final
-
-Próximo objetivo:
-Completar la automatización total del flujo en Cypress.
-
-🤝 Observaciones finales
-Este proyecto refleja un proceso real de debugging y adaptación de pruebas
-al portar un flujo automatizado desde Selenium a Cypress.
-
-Cualquier sugerencia es bienvenida; continúo mejorando mis habilidades de automatización.
-👤 Autor
-David Martínez
-Bootcamp QA Engineer – TripleTen
+**Victor David Martínez Matías**
+QA Engineer con experiencia en pruebas manuales, automatización UI y pruebas de API.
+Multi-framework: Selenium · Playwright · Cypress · Python · JavaScript
